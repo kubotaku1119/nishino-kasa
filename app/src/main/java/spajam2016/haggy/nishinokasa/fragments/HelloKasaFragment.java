@@ -82,10 +82,10 @@ public class HelloKasaFragment extends Fragment {
     }
 
     private int getHelloTextResource() {
-        return 0;
+        return R.string.hello_text_0;
     }
 
     private int getHelloImageResource() {
-        return 0;
+        return R.mipmap.ic_launcher;
     }
 }
