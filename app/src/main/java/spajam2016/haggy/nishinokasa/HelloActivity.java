@@ -45,7 +45,7 @@ public class HelloActivity extends AppCompatActivity implements ViewPager.OnPage
         viewPager.setAdapter(pagerAdapter);
         viewPager.addOnPageChangeListener(this);
 
-        pagerDotIndicator = (LinearLayout)findViewById(R.id.viewPagerCountDots);
+        pagerDotIndicator = (LinearLayout) findViewById(R.id.viewPagerCountDots);
         final int childCount = viewPager.getAdapter().getCount();
         indicatorDots = new ImageView[childCount];
         for (int index = 0; index < childCount; index++) {
@@ -101,5 +101,4 @@ public class HelloActivity extends AppCompatActivity implements ViewPager.OnPage
             return 5;
         }
     }
-
 }
