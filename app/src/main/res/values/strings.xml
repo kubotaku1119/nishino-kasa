@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Nishino-Kasa</string>
+    <string name="app_name">西野カサ</string>
 
     <string name="hello_text_0">はじめまして、西野カサです</string>
 
@@ -7,6 +7,6 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
 
-    <string name="weather_api_key">xxxxx</string>
+    <string name="weather_api_key">3452ce717fe6475f4c7725cac70af329</string>
 
 </resources>
