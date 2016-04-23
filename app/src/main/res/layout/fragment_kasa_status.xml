@@ -1,29 +1,63 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="spajam2016.haggy.nishinokasa.fragments.KasaStatusFragment">
+    android:layout_height="wrap_content"
+    tools:context="spajam2016.haggy.nishinokasa.fragments.KasaStatusFragment"
+    android:background="#ffffff">
 
-
-    <ImageView
-        android:id="@+id/status_image_kasa"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:scaleType="fitCenter"
-        android:layout_centerInParent="true"
-        android:padding="32dp"/>
 
     <ImageView
         android:id="@+id/status_image_weather"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true" />
+        android:layout_alignParentTop="true"
+        android:scaleType="fitCenter"
+        android:layout_alignParentBottom="false"
+        android:layout_alignWithParentIfMissing="false"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentStart="true"
+        android:minHeight="100dp" />
+
+    <ImageView
+        android:id="@+id/status_image_kasa"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scaleType="fitCenter"
+        android:layout_toStartOf="@id/status_image_weather"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@+id/status_image_weather"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginBottom="30dp"
+        android:layout_marginLeft="0dp"
+        android:layout_marginRight="0dp" />
 
     <ImageView
         android:id="@+id/status_image_love"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true" />
-    
+        android:layout_alignParentLeft="true"
+        android:src="@mipmap/heart"
+        android:nestedScrollingEnabled="false"
+        android:maxHeight="50dp"
+        android:maxWidth="50dp"
+        android:scaleType="fitCenter"
+        android:minHeight="10dp"
+        android:minWidth="10dp"
+        android:adjustViewBounds="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:id="@+id/textView"
+        android:background="@drawable/baloon"
+        android:text="明日は一緒に\nおでかけしたいな"
+        android:maxWidth="160dp"
+        android:layout_centerHorizontal="true"
+        android:layout_alignBottom="@+id/status_image_kasa"
+        android:layout_alignRight="@+id/status_image_kasa"
+        android:layout_marginBottom="100dp" />
+
 </RelativeLayout>

@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/Nishino-Kasa.iml" filepath="$PROJECT_DIR$/Nishino-Kasa.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/nishino-kasa.iml" filepath="$PROJECT_DIR$/nishino-kasa.iml" />
     </modules>
   </component>
 </project>

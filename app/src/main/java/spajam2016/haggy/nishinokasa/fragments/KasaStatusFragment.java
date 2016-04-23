@@ -81,20 +81,35 @@ public class KasaStatusFragment extends Fragment {
             final int weatherId = info.getWeatherId();
 
             int condition = (int)(weatherId / 100);
-            if ((condition == 3) || (condition == 5) || (condition == 8)) {
-                showRain();
+            final View view = getView();
+            final ImageView weatherImage = (ImageView) view.findViewById(R.id.status_image_weather);
+//            final ImageView love = (ImageView) view.findViewById(R.id.status_image_love);
+//            love.setScaleX(0.6f);
+//            love.setScaleY(0.6f);
+
+            switch(condition){
+                case 3:
+                case 5:
+                    weatherImage.setImageResource(R.mipmap.rainy);
+                    break;
+                case 6:
+                    weatherImage.setImageResource(R.mipmap.snow);
+                    break;
+                default:
+                    if(weatherId == 800){
+                        weatherImage.setImageResource(R.mipmap.sunny);
+                    }else{
+                        weatherImage.setImageResource(R.mipmap.cloudy);
+                    }
             }
         }
     };
 
-    private void showRain() {
-        Log.d(TAG, "show rain");
-    }
 
     private void getKasaStatus() {
         // TODO:ここ実装する
         final View view = getView();
         final ImageView kasaImage = (ImageView) view.findViewById(R.id.status_image_kasa);
-        kasaImage.setImageResource(R.mipmap.open_kasa);
+        kasaImage.setImageResource(R.mipmap.half_kasa);
     }
 }
