@@ -86,6 +86,6 @@ public class HelloKasaFragment extends Fragment {
     }
 
     private int getHelloImageResource() {
-        return R.mipmap.ic_launcher;
+        return R.mipmap.open_kasa;
     }
 }

@@ -8,8 +8,10 @@
     <ImageView
         android:id="@+id/status_image_kasa"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true" />
+        android:layout_height="match_parent"
+        android:scaleType="fitCenter"
+        android:layout_centerInParent="true"
+        android:padding="32dp"/>
 
     <ImageView
         android:id="@+id/status_image_weather"
