@@ -14,9 +14,11 @@
         android:scaleType="fitCenter"
         android:layout_alignParentBottom="false"
         android:layout_alignWithParentIfMissing="false"
-        android:layout_alignParentEnd="true"
         android:layout_alignParentStart="true"
-        android:minHeight="100dp" />
+        android:minHeight="105dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true" />
 
     <ImageView
         android:id="@+id/status_image_kasa"
@@ -45,19 +47,21 @@
         android:scaleType="fitCenter"
         android:minHeight="10dp"
         android:minWidth="10dp"
-        android:adjustViewBounds="true" />
+        android:adjustViewBounds="true"
+        android:layout_marginLeft="5dp"
+        android:layout_marginBottom="5dp" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceSmall"
-        android:id="@+id/textView"
         android:background="@drawable/baloon"
-        android:text="明日は一緒に\nおでかけしたいな"
         android:maxWidth="160dp"
         android:layout_centerHorizontal="true"
         android:layout_alignBottom="@+id/status_image_kasa"
         android:layout_alignRight="@+id/status_image_kasa"
-        android:layout_marginBottom="100dp" />
+        android:layout_marginBottom="170dp"
+        android:id="@+id/text_kasa_comment"
+        android:layout_marginRight="10dp" />
 
 </RelativeLayout>

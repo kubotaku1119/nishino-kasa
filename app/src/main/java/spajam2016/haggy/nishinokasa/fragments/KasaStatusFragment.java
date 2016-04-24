@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.kubotaku.android.openweathermap.lib.WeatherInfo;
 
@@ -23,6 +24,10 @@ import spajam2016.haggy.nishinokasa.api.WeatherGetter;
 public class KasaStatusFragment extends Fragment {
 
     private static final String TAG = KasaStatusFragment.class.getSimpleName();
+
+    //todo:好感度設定する
+    private int mLove=50;
+
 
     public KasaStatusFragment() {
         // Required empty public constructor
@@ -68,48 +73,151 @@ public class KasaStatusFragment extends Fragment {
 
         final WeatherGetter weatherGetter = new WeatherGetter(getContext());
         weatherGetter.getForecast(34.702318, 135.4979219, onGetWeatherListener);
-
-        getKasaStatus();
+//        mLove = 15;
+        setLoveGage(mLove);
     }
 
     private WeatherGetter.OnGetWeatherListener onGetWeatherListener = new WeatherGetter.OnGetWeatherListener() {
         @Override
         public void OnGetForecast(List<WeatherInfo> forecast) {
-            Log.d(TAG, "onGetForecast");
+            final int today = forecast.get(0).getWeatherId();
+            final int tomorrow = forecast.get(1).getWeatherId();
+//            int today = 300;
+//            int tomorrow = 810;
 
-            final WeatherInfo info = forecast.get(0);
-            final int weatherId = info.getWeatherId();
 
-            int condition = (int)(weatherId / 100);
-            final View view = getView();
-            final ImageView weatherImage = (ImageView) view.findViewById(R.id.status_image_weather);
-//            final ImageView love = (ImageView) view.findViewById(R.id.status_image_love);
-//            love.setScaleX(0.6f);
-//            love.setScaleY(0.6f);
+            setCurrentWeather(today);
+            setKasaState(today, mLove);
 
-            switch(condition){
-                case 3:
-                case 5:
-                    weatherImage.setImageResource(R.mipmap.rainy);
-                    break;
-                case 6:
-                    weatherImage.setImageResource(R.mipmap.snow);
-                    break;
-                default:
-                    if(weatherId == 800){
-                        weatherImage.setImageResource(R.mipmap.sunny);
-                    }else{
-                        weatherImage.setImageResource(R.mipmap.cloudy);
-                    }
-            }
+            setComment(today, tomorrow, mLove);
         }
     };
 
 
-    private void getKasaStatus() {
-        // TODO:ここ実装する
+    public enum WeatherState{
+        Snow,
+        Rain,
+        Cloud,
+        Fine
+    }
+
+    private WeatherState getWeatherState(int weatherId) {
+        switch((int)(weatherId / 100)){
+            case 3:
+            case 5:
+                return WeatherState.Rain;
+            case 6:
+                return WeatherState.Snow;
+            default:
+                if(weatherId == 800){
+                    return WeatherState.Fine;
+                }else{
+                    return WeatherState.Cloud;
+                }
+        }
+    }
+
+    private void setCurrentWeather(int weatherId){
+        final View view = getView();
+        final ImageView weatherImage = (ImageView) view.findViewById(R.id.status_image_weather);
+
+        switch(getWeatherState(weatherId)){
+            case Rain:
+                weatherImage.setImageResource(R.mipmap.rainy);
+                break;
+            case Snow:
+                weatherImage.setImageResource(R.mipmap.snow);
+                break;
+            case Fine:
+                weatherImage.setImageResource(R.mipmap.sunny);
+                break;
+            case Cloud:
+                weatherImage.setImageResource(R.mipmap.cloudy);
+                break;
+        }
+    }
+
+    private void setKasaState(int weatherId, int love){
         final View view = getView();
         final ImageView kasaImage = (ImageView) view.findViewById(R.id.status_image_kasa);
-        kasaImage.setImageResource(R.mipmap.half_kasa);
+
+        if(love < 25){
+            kasaImage.setImageResource(R.mipmap.sulk_kasa);
+            return;
+        }
+
+        switch(getWeatherState(weatherId)){
+            case Rain:
+                kasaImage.setImageResource(R.mipmap.open_kasa);
+                break;
+            case Snow:
+                kasaImage.setImageResource(R.mipmap.open_kasa);
+                break;
+            case Fine:
+                kasaImage.setImageResource(R.mipmap.close_kasa);
+                break;
+            case Cloud:
+                kasaImage.setImageResource(R.mipmap.half_kasa);
+                break;
+        }
     }
+
+    private void setLoveGage(int love){
+        final View view = getView();
+        final ImageView loveImage = (ImageView) view.findViewById(R.id.status_image_love);
+
+        loveImage.setScaleX((float)love/100);
+        loveImage.setScaleY((float)love/100);
+    }
+
+    private void setComment(int todaysWeather, int tomorrowsWeather, int love){
+        final View view = getView();
+        final TextView kasaComment = (TextView) view.findViewById(R.id.text_kasa_comment);
+
+        if(love < 25){
+            kasaComment.setText("もう構って\nくれないのね");
+            return;
+        }
+
+        switch(getWeatherState(todaysWeather)){
+            case Rain:
+                kasaComment.setText("ねぇ、おでかけ\nしましょうよ");
+                break;
+            case Snow:
+                kasaComment.setText("ねぇ、おでかけ\nしましょうよ");
+                break;
+            case Fine:
+                switch(getWeatherState(tomorrowsWeather)){
+                    case Rain:
+                    case Snow:
+                        kasaComment.setText("明日は一緒に\nおでかけしたいな");
+                        break;
+                    default:
+                        kasaComment.setText("ええ、とっても\nいいお天気ね…");
+                        break;
+                }
+                break;
+            case Cloud:
+                switch(getWeatherState(tomorrowsWeather)){
+                    case Rain:
+                    case Snow:
+                        kasaComment.setText("明日は一緒に\nおでかけしたいな");
+                        break;
+                    default:
+                        kasaComment.setText("ただ一緒に\nいたいだけなの");
+                        break;
+                }
+                break;
+        }
+
+    }
+
+    public void setLove(int love){
+        mLove = love;
+    }
+
+    public int getLove(){
+        return mLove;
+    }
+
 }

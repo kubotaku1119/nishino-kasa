@@ -36,7 +36,7 @@ public class WeatherGetter {
         this.onGetWeatherListener = listener;
 
         final IForecastGetter forecastGetter = createForecastGetter();
-        forecastGetter.setDailyCount(1);
+        forecastGetter.setDailyCount(2);
         forecastGetter.setForecastType(IForecastGetter.FORECAST_TYPE_DAILY);
         forecastGetter.setLatLng(new LatLng(latitude, longitude));
 
