@@ -10,10 +10,13 @@ import android.os.IBinder;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
+import com.kubotaku.android.openweathermap.lib.WeatherInfo;
+
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import spajam2016.haggy.nishinokasa.api.WeatherGetter;
 import spajam2016.haggy.nishinokasa.bluetooth.BleWrapper;
 import spajam2016.haggy.nishinokasa.bluetooth.KasaGattAttributes;
 
@@ -96,6 +99,8 @@ public class KaService extends Service {
         @Override
         public void run() {
 
+            getWeatherForecast();
+
             bleWrapper.startScan(this);
 
             while (!kasaWatchThread.isInterrupted()) {
@@ -126,7 +131,8 @@ public class KaService extends Service {
                 if (service.getUuid().equals(KasaGattAttributes.UUID_KASA_SERVICE)) {
                     targerCharacteristic = service.getCharacteristic(KasaGattAttributes.UUID_KASA_CHARA);
                     if (targerCharacteristic != null) {
-                        int value = isAitai ? 1 : 0;
+                        int value = isAitai ? 1 : 2;
+                        Log.d(TAG, "value : " + value);
                         bleWrapper.writeCharacteristic(targerCharacteristic, value, BluetoothGattCharacteristic.FORMAT_UINT8, 0);
                     }
                 }
@@ -148,14 +154,13 @@ public class KaService extends Service {
                         isAitai = false;
                         bleWrapper.discoverServices();
                     }
-                }, 3000);
+                }, 10000);
             } else {
                 new Timer().schedule(new TimerTask() {
                     @Override
                     public void run() {
                         bleWrapper.disconnect();
                         isConnected = false;
-                        bleWrapper.startScan(KasaTask.this);
                     }
                 }, 3000);
             }
@@ -175,7 +180,9 @@ public class KaService extends Service {
             }
 
             if (device.getName().equals("N_Kasa")) {
-                if (rssi >= -50) {
+                if (rssi >= -55) {
+                    // TODO:本当は天気情報見るよ！
+                    //if ((rssi >= -50) && (isRain)) {
                     isConnected = true;
                     isAitai = true;
                     bleWrapper.connect(device, this);
@@ -184,6 +191,32 @@ public class KaService extends Service {
             }
         }
     }
+
+    // -----------------------------
+
+    private boolean isRain;
+
+    private void getWeatherForecast() {
+        final WeatherGetter weatherGetter = new WeatherGetter(this);
+        weatherGetter.getForecast(34.702318, 135.4979219, onGetWeatherListener);
+    }
+
+    private WeatherGetter.OnGetWeatherListener onGetWeatherListener = new WeatherGetter.OnGetWeatherListener() {
+
+        @Override
+        public void OnGetForecast(List<WeatherInfo> forecast) {
+            Log.d(TAG, "onGetForecast");
+
+            final WeatherInfo info = forecast.get(0);
+            final int weatherId = info.getWeatherId();
+
+            int condition = (int) (weatherId / 100);
+            isRain = true;
+            if ((condition == 3) || (condition == 5)) {
+                isRain = true;
+            }
+        }
+    };
 
     // -----------------------------
 
