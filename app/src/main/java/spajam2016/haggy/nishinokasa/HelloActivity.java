@@ -1,5 +1,6 @@
 package spajam2016.haggy.nishinokasa;
 
+import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -10,10 +11,12 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import spajam2016.haggy.nishinokasa.fragments.HelloKasaFragment;
 
-public class HelloActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener {
+public class HelloActivity extends AppCompatActivity
+        implements ViewPager.OnPageChangeListener, HelloKasaFragment.OnStartButtonClickedListener {
 
     private LinearLayout pagerDotIndicator;
 
@@ -85,6 +88,13 @@ public class HelloActivity extends AppCompatActivity implements ViewPager.OnPage
 
     }
 
+    @Override
+    public void OnClicked() {
+        final Intent intent = new Intent(HelloActivity.this, MainActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
     private static class HelloViewPagerAdapter extends FragmentPagerAdapter {
 
         public HelloViewPagerAdapter(FragmentManager fm) {
@@ -95,7 +105,7 @@ public class HelloActivity extends AppCompatActivity implements ViewPager.OnPage
         public Fragment getItem(int position) {
             return HelloKasaFragment.newInstance(position);
         }
-
+//Helloのスライドの数
         @Override
         public int getCount() {
             return 5;

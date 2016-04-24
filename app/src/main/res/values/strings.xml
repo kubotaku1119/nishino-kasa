@@ -1,7 +1,32 @@
 <resources>
     <string name="app_name">西野カサ</string>
-
-    <string name="hello_text_0">はじめまして、西野カサです</string>
+//Helloに表示されるテキスト
+    <string name="hello_text_0">
+        はじめまして、\n
+        わたし西野カサです。\n
+        こんな私を選んでくれて\n
+        どうもありがとう。
+    </string>
+    <string name="hello_text_1">
+        雨が降る日は教えるから\n
+        私も連れて行ってね。\n
+        寂しいときは\n
+        会いたくて会いたくて震える\n
+    </string>
+    <string name="hello_text_2">
+        あなた以外の人はイヤ。\n
+        泣いちゃうから\n
+        私のこと離さないでね。
+    </string>
+    <string name="hello_text_3">
+        お出かけした日は\n
+        日記に書くね。\n
+        思い出いっぱい作ろうね。
+    </string>
+    <string name="hello_text_4">
+        これからどうぞよろしくね。\n
+        いっぱいおでかけしようね！
+    </string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
