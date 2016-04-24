@@ -95,7 +95,7 @@ public class HelloActivity extends AppCompatActivity implements ViewPager.OnPage
         public Fragment getItem(int position) {
             return HelloKasaFragment.newInstance(position);
         }
-
+//Helloのスライドの数
         @Override
         public int getCount() {
             return 5;

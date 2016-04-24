@@ -81,11 +81,39 @@ public class HelloKasaFragment extends Fragment {
         imageView.setImageResource(getHelloImageResource());
     }
 
+    //ここから下を編集
     private int getHelloTextResource() {
-        return R.string.hello_text_0;
+//        return R.string.hello_text_0;
+        switch (helloIndex) {
+            case 0:
+                return R.string.hello_text_0;
+            case 1:
+                return R.string.hello_text_1;
+            case 2:
+                return R.string.hello_text_2;
+            case 3:
+                return R.string.hello_text_3;
+            case 4:
+                return R.string.hello_text_4;
+        }
+        return 0;
+    }
+    private int getHelloImageResource() {
+//        return R.mipmap.open_kasa;
+        switch (helloIndex) {
+            case 0:
+                return R.mipmap.open_kasa;
+            case 1:
+                return R.mipmap.hello_image1;
+            case 2:
+                return R.mipmap.hello_image2;
+            case 3:
+                return R.mipmap.hello_image3;
+            case 4:
+                return R.mipmap.open_kasa;
+        }
+        return 0;
     }
 
-    private int getHelloImageResource() {
-        return R.mipmap.open_kasa;
-    }
+
 }
