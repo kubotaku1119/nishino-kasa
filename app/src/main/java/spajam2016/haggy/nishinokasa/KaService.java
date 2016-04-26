@@ -5,6 +5,7 @@ import android.app.Service;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothGattCharacteristic;
 import android.bluetooth.BluetoothGattService;
+import android.content.Context;
 import android.content.Intent;
 import android.os.IBinder;
 import android.support.v4.app.NotificationCompat;
@@ -43,13 +44,17 @@ public class KaService extends Service {
         super.onCreate();
 
         try {
-            bleWrapper = BleWrapper.getsInstance(this);
-            bleWrapper.initialize();
+            if (bleWrapper == null) {
+                bleWrapper = BleWrapper.getsInstance(this);
+                bleWrapper.initialize();
+            }
         } catch (Exception e) {
             e.printStackTrace();
             this.stopSelf();
         }
     }
+
+    private boolean isRunning = false;
 
     @Override
     public void onDestroy() {
@@ -58,7 +63,7 @@ public class KaService extends Service {
         try {
             if (kasaWatchThread != null) {
                 kasaWatchThread.interrupt();
-                kasaWatchThread.join();
+                isRunning = false;
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -77,10 +82,17 @@ public class KaService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        startForeground();
 
-        kasaWatchThread = new Thread(new KasaTask());
-        kasaWatchThread.start();
+        if (intent.getAction().equals(ACTION_START)) {
+            startForeground();
+
+            isRunning = true;
+            kasaWatchThread = new Thread(new KasaTask());
+            kasaWatchThread.start();
+        } else {
+            this.stopSelf();
+        }
+
 
         return START_STICKY;
     }
@@ -103,12 +115,17 @@ public class KaService extends Service {
 
             bleWrapper.startScan(this);
 
-            while (!kasaWatchThread.isInterrupted()) {
+            while (isRunning) {
                 try {
                     Thread.sleep(1);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
+            }
+
+            if (bleWrapper != null) {
+                bleWrapper.removeGattListener();
+                bleWrapper.stopScan();
             }
         }
 
@@ -180,7 +197,7 @@ public class KaService extends Service {
             }
 
             if (device.getName().equals("N_Kasa")) {
-                if (rssi >= -55) {
+                if (rssi >= -65) {
                     // TODO:本当は天気情報見るよ！
                     //if ((rssi >= -50) && (isRain)) {
                     isConnected = true;
@@ -232,5 +249,23 @@ public class KaService extends Service {
         builder.setContentTitle(getText(R.string.app_name));
         builder.setContentText("カサがあなたを待っています...");
         return builder.build();
+    }
+
+    // -----------------------------
+
+    private static final String ACTION_START = "action_start";
+
+    private static final String ACTION_STOP = "action_stop";
+
+    public static Intent createStartIntent(Context context) {
+        final Intent intent = new Intent(context, KaService.class);
+        intent.setAction(ACTION_START);
+        return intent;
+    }
+
+    public static Intent createStopIntent(Context context) {
+        final Intent intent = new Intent(context, KaService.class);
+        intent.setAction(ACTION_STOP);
+        return intent;
     }
 }

@@ -1,6 +1,8 @@
 package spajam2016.haggy.nishinokasa.fragments;
 
+import android.app.ActivityManager;
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -15,6 +17,7 @@ import com.kubotaku.android.openweathermap.lib.WeatherInfo;
 
 import java.util.List;
 
+import spajam2016.haggy.nishinokasa.KaService;
 import spajam2016.haggy.nishinokasa.R;
 import spajam2016.haggy.nishinokasa.api.WeatherGetter;
 
@@ -75,6 +78,32 @@ public class KasaStatusFragment extends Fragment {
         weatherGetter.getForecast(34.702318, 135.4979219, onGetWeatherListener);
 //        mLove = 15;
         setLoveGage(mLove);
+
+        final ImageView imageKasa = (ImageView) getView().findViewById(R.id.status_image_kasa);
+        imageKasa.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = null;
+                if (!isKaServiceRunning()) {
+                    intent = KaService.createStartIntent(getContext());
+                } else {
+                    intent = KaService.createStopIntent(getContext());
+                }
+                getActivity().startService(intent);
+            }
+        });
+    }
+
+    private boolean isKaServiceRunning() {
+        final Context context = getContext();
+        ActivityManager am = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+        List<ActivityManager.RunningServiceInfo> runningService = am.getRunningServices(Integer.MAX_VALUE);
+        for (ActivityManager.RunningServiceInfo i : runningService) {
+            if (KaService.class.getName().equals(i.service.getClassName())) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private WeatherGetter.OnGetWeatherListener onGetWeatherListener = new WeatherGetter.OnGetWeatherListener() {
